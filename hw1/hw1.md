@@ -67,7 +67,7 @@ Original data
 
 Voronoi diagram
 
-![](https://github.com/mungsoo/CS-446/blob/master/image/1nn_voronoi.jpg?raw=true)
+![](https://github.com/mungsoo/CS-446/blob/master/hw1/image/1nn_voronoi.jpg?raw=true)
 
 (c)
 The accuracy is 0.97777
