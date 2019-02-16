@@ -1,0 +1,381 @@
+\documentclass{article}
+        \usepackage[margin=1in]{geometry}
+        \usepackage{hyperref}
+        \usepackage{amsmath,amsfonts,amssymb,amsthm,commath,dsfont}
+        \usepackage{enumitem}
+        \usepackage{framed}
+        \usepackage{xspace}
+        \usepackage{microtype}
+        \usepackage[round]{natbib}
+        \usepackage{cleveref}
+        \usepackage[dvipsnames]{xcolor}
+        \usepackage{graphicx}
+
+        % following loops stolen from djhsu
+        \def\ddefloop#1{\ifx\ddefloop#1\else\ddef{#1}\expandafter\ddefloop\fi}
+        \def\ddef#1{\expandafter\def\csname bb#1\endcsname{\ensuremath{\mathbb{#1}}}}
+        \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+        \def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+        \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+        \def\ddef#1{\expandafter\def\csname bf#1\endcsname{\ensuremath{\mathbf{#1}}}}
+        \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+        % \cA, \cB, ...
+        \def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+        \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+
+        % \vA, \vB, ..., \va, \vb, ...
+        \def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{#1}}}}
+        \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+
+
+        \DeclareMathOperator*{\argmin}{arg\,min}
+        \DeclareMathOperator*{\argmax}{arg\,max}
+
+        \def\SPAN{\textup{span}}
+        \def\tu{\textup{u}}
+        \def\R{\mathbb{R}}
+        \def\E{\mathbb{E}}
+        \def\Z{\mathbb{Z}}
+        \def\be{\mathbf{e}}
+        \def\nf{\nabla f}
+        \def\veps{\varepsilon}
+        \def\cl{\textup{cl}}
+        \def\inte{\textup{int}}
+        \def\dom{\textup{dom}}
+        \def\Rad{\textup{Rad}}
+        \def\lsq{\ell_{\textup{sq}}}
+        \def\hcR{\widehat{\cR}}
+        \def\hcRl{\hcR_\ell}
+        \def\cRl{\cR_\ell}
+        \def\hcE{\widehat{\cE}}
+        \def\cEl{\cE_\ell}
+        \def\hcEl{\hcE_\ell}
+        \def\eps{\epsilon}
+        \def\1{\mathds{1}}
+        \newcommand{\red}[1]{{\color{red} #1}}
+        \newcommand{\blue}[1]{{\color{blue} #1}}
+        \def\srelu{\sigma_{\textup{r}}}
+        \def\vsrelu{\vec{\sigma_{\textup{r}}}}
+        \def\vol{\textup{vol}}
+        \def\tF{{\scriptscriptstyle\textup{F}}}
+        \DeclareMathOperator{\tr}{tr}
+        \newcommand\T{{\scriptscriptstyle\mathsf{T}}}
+
+        \newcommand{\ip}[2]{\left\langle #1, #2 \right \rangle}
+        \newcommand{\mjt}[1]{{\color{blue}\emph\textbf{[M:}~#1~\textbf{]}}}
+
+        \newtheorem{fact}{Fact}
+        \newtheorem{lemma}{Lemma}
+        \newtheorem{claim}{Claim}
+        \newtheorem{proposition}{Proposition}
+        \newtheorem{theorem}{Theorem}
+        \newtheorem{corollary}{Corollary}
+        \newtheorem{condition}{Condition}
+        \theoremstyle{definition}
+        \newtheorem{definition}{Definition}
+        \theoremstyle{remark}
+        \newtheorem{remark}{Remark}
+        \newtheorem{example}{Example}
+
+        \newenvironment{Q}
+        {%
+            \clearpage
+        \item
+            }
+        {%
+            \phantom{s}
+          \bigskip
+          \textbf{Solution.}
+        }
+
+        \title{CS 446 MJT --- Homework 2}
+        \author{\emph{your NetID here}}
+        \date{Version 1}
+
+        \begin{document}
+        \maketitle
+
+        \textbf{Instructions.}
+        \begin{itemize}
+            \item
+                Homework is due \textbf{Tuesday, February 26, at 11:59pm}; no late homework accepted.
+                You will have everything you need to solve these problems after both deep network
+                lectures.
+
+            \item
+                Everyone must submit individually at gradescope under \texttt{hw2} and \texttt{hw2code}.
+
+
+            \item
+                The ``written'' submission at \texttt{hw2} \textbf{must be typed}, and submitted in
+                any format gradescope accepts (to be safe, submit a PDF).  You may use \LaTeX, markdown,
+                google docs, MS word, whatever you like; but it must be typed!
+
+
+            \item
+                When submitting at \texttt{hw2}, gradescope will ask you to mark out boxes
+                around each of your answers; please do this precisely!
+
+            \item
+                Please make sure your NetID is clear and large on the first page of the homework.
+
+            \item
+                Your solution \textbf{must} be written in your own words.
+                Please see the course webpage for full academic integrity information.
+                Briefly, you may have high-level discussions with at most 3 classmates,
+                whose NetIDs you should place on the first page of your solutions,
+                and you should cite any external reference you use; despite all this,
+                your solution must be written in your own words.
+
+            \item
+                We reserve the right to reduce the auto-graded score for \texttt{hw2code}
+                if we detect funny business (e.g., rather than implementing an algorithm,
+                you keep re-submitting the assignment to the auto-grader, eventually completing
+                a binary search for the answers).
+
+            \item
+              There are \textbf{no regrade requests} on \texttt{hw2code}, which is the code auto-grader;
+              however, you can re-submit and re-grade as many times as you like before the deadline!
+              Start early and report any issues on piazza!
+
+            \item
+                Methods and functions in the template and utility code include
+                docstrings to describe the inputs and outputs.  The autograder
+                relies on correct implementations of these methods.  Follow the
+                docstrings to avoid failing tests.
+
+
+        \end{itemize}
+        \begin{enumerate}
+                \begin{Q}
+                    \textbf{Singular Value Decomposition and norms.}
+                    \begin{enumerate}
+                        \item
+                            Given a matrix $\vA\in\R^{n\times d}$, define its \emph{spectral norm} $\|\vA\|_2$ as
+                            \[
+                                \|\vA\|_2 := \max_{x\in\R^d,\|x\|_2\le1} \|\vA{}\vx\|_2.
+                            \]
+                        Prove that $\|\vA\|_2$ is equal to the largest singular value of $\vA$.  You may assume $\vA$ is not the 0 matrix.
+
+                            \textbf{Hint:} write $\vA$ in terms of its SVD, and rewrite $\vx$ in one of the bases provided by the SVD.
+
+                        \item
+                            Prove that for any matrix $\vA\in\R^{n\times d}$ and vector $\vx\in\R^d$, then
+                            $\|\vA{}\vx\|_2 \leq \|\vA\|_2 \cdot \|\vx\|_2$.
+
+                        \item
+                            Given a matrix $\vA\in\R^{n\times d}$, define its \emph{Frobenius norm} $\|\vA\|_2$ as
+                            \[
+                                \|\vA\|_\tF = \sqrt{\sum_{i=1}^n\sum_{j=1}^d A_{ij}^2}.
+                            \]
+                        (This is the same as the vector $\|\cdot\|_2$ norm of the unrolled/flattened/vectorized matrix.)
+
+                            Prove that $\|\vA\|_\tF^2 = \tr(\vA^\T\vA)$, where $\tr$ denotes the trace.
+
+                        \item
+                            Continuing with the previous part, now show
+                            \[
+                                \|\vA\|_\tF = \sqrt{ \sum_{i=1}^r s_i^2 },
+                            \]
+                        the (vector) $\ell_2$ norm of the singular values of $\vA$ (or 0 if there are none).
+
+                            \textbf{Hint:} the previous part gives a few convenient ways to do this problem
+                            after you replace $\vA$ with its SVD.
+
+                        \item
+                            Given matrices $\vA\in\R^{n\times d}$ and $\vB\in\R^{d\times m}$, prove
+                            \[
+                                \|\vA\vB\|_\tF \leq \|\vA\|_2 \cdot \|\vB\|_\tF.
+                            \]
+
+                            \textbf{Hint:} note that
+                            $\|\vB\|_\tF^2 = \sum_{i=1}^m \|\vB_{:,i}\|_2^2$,
+                            where $\vB_{:,i}$ denotes the $i^\textup{th}$ column of $\vB$.
+                    \item
+                        Suppose $\vA\in\R^{n\times d}$ has rank $r\geq 1$. Prove
+                            \[
+                                \|\vA^+ \vA\|_2
+                            = \|\vA \vA^+\|_2 = 1
+                            \]
+                        and
+                            \[
+                                \|\vA^+ \vA\|_\tF
+                            = \|\vA \vA^+\|_\tF = \sqrt{r}.
+                            \]
+
+                    \item
+                        Choose a matrix $\vA\in\R^{n\times n}$ with rank $1 \leq r < n$, where $n\geq 2$,
+                            and a vector $\vv\in\R^n$ so that $\vA^+\vA \vv = 0$ but $\vA\vA^+ \vv \neq 0$.
+
+                            Please use only 1-2 sentences for your answer.
+
+                          \textbf{Hint:} one convenient way to solve and then state your answer is to define/construct
+                          $\vA$ via its SVD.
+
+                          \textbf{Remark:} the point of this part is that inverses and pseudoinverses really
+                          can behave differently!
+
+
+
+                \end{enumerate}
+            \end{Q}
+                \emph{(Your solution here.)}
+
+
+                \begin{Q}
+                    \textbf{Singular Value Decomposition and image reconstruction.}
+                    \begin{enumerate}
+                        \item Say that if $\vA = \sum_{i=1}^r s_i \vu_i \vv_i^\T$,
+                            then $\sum_{i=1}^{\min\{k,r\}} s_i \vu_i \vv_i^\T$ is
+                            the \emph{$k$-reconstruction} of $\vA$.
+                            Similarly, we define the
+                            \emph{min-$k$-reconstruction} to be
+                            $\sum_{i=\max\{1,r-k+1\}}^{r} s_i \vu_i \vv_i^\T$.
+                            Implement \texttt{reconstruct\_SVD}, as per the
+                            docstrings.
+                        \item Add in your writeup a log-scale plot of the singular values
+                            of the red color channel:
+                            Let $\vA$ denote the red color channel and
+                            $\vA = \sum_{i=1}^r s_i \vu_i \vv_i^\T$ denote its singular value decomposition,
+                            for each $1\le i\le r$, plot $\ln(1+s_i)$.
+                            Comment on the distribution of the singular values.
+                            Is the log-singular-value plot linear?
+                        \item Use the function \texttt{get\_img} to get an old
+                            NASA Astronomy Picture of the Day.  Include in your report plots of
+                            \begin{enumerate}
+                                \item The original image
+                                \item The 100-reconstruction of the image
+                                \item The 50-reconstruction of the image
+                                \item The 20-reconstruction of the image
+                                \item The 10-reconstruction of the image
+                                \item The min-600-reconstruction of the image
+                            \end{enumerate}
+                    \end{enumerate}
+                \end{Q}
+          \emph{(Your solution here.)}
+
+                \begin{Q}
+                    \textbf{Neural Networks on XOR.}
+
+                    In this problem you will demonstrate that a two-layer
+                    neural network with the ReLU activation function can
+                    classify the XOR dataset correctly.  This will also serve
+                    as an introduction to writing your own neural networks in
+                    PyTorch!  Consider the two layer neural network below
+                    \begin{equation*}
+                        \vx \mapsto \vW_2 \sigma_1(\vW_1 \vx  + \vb_1)  + \vb_2.
+                    \end{equation*}
+
+                    \begin{enumerate}
+                        \item Implement your network in the class XORNet.  You
+                            will need to modify \texttt{\_\_init\_\_},
+                            \texttt{set\_l1}, \texttt{set\_l2}, and
+                            \texttt{forward} methods.  The setter methods are
+                            used by the autograder to test your network
+                            implementation.
+                            \textit{Note}: to maintain consistency with
+                            PyTorch's \texttt{torch.nn.Linear}, the arguments
+                            to \texttt{set\_l1}, \texttt{set\_l2} will have
+                            shapes consistent with the following network
+                            formulation: $f(\vX) = \sigma_1(\vX\vW_1^\T +
+                            \vb_1)\vW_2^\T + \vb_2$, where $\vX \in \mathbb{R}^{n \times d}$.
+                        \item Define the \texttt{fit} function.  Please refer
+                            to the docstring and template code for details.
+                        \item Using your \texttt{fit} function, train an XORNet
+                            on the XOR dataset for 5000 epochs, and then use
+                            \texttt{contour\_torch} to plot your resulting
+                            network.  Include the plot in your writeup.
+                            Did you successfully classify the XOR points, or
+                            did your gradient descent get stuck in a local
+                            minima of the loss function?
+                    \end{enumerate}
+                \end{Q}
+                \emph{(Your solution here.)}
+
+
+                \begin{Q}
+                    \textbf{Convolutional Neural Networks.}
+
+                    In this problem, you will use convolutional neural networks
+                    to learn to classify handwritten digits.  The digits will
+                    be encoded as 8x8 matrices.  The layers of your neural
+                    network should be:
+                    \begin{itemize}
+                        \item A 2D convolutional layer with 1 input channel and 8 output channels, with a kernel size of 3
+                        \item A 2D maximimum pooling layer, with kernel size 2
+                        \item A 2D convolutional layer with 8 input channels and 4 output channels, with a kernel size of 3
+                        \item A fully connected (torch.nn.Linear) layer with 4 inputs and 10 outputs
+                    \end{itemize}
+                    Apply the ReLU activation function to the output
+                    of each of your convolutional layers before inputting them
+                    to your next layer.  For both of the convolutional layers
+                    of the network, use the default settings parameters
+                    (stride=1, padding=0, dilation=1, groups=1, bias=True).
+
+                    \begin{enumerate}
+                        \item Implement the class \texttt{DigitsConvNet}.  Please refer to the dosctrings in hw2.py for details.
+                        \item Implement \texttt{fit\_and\_validate} for use in
+                            the next several parts.  Please do not shuffle the
+                            inputs when batching in this part!  The utility
+                            function \texttt{loss\_batch} will be useful. See
+                            the docstrings in hw2.py and hw2\_util.py or details.
+                        \item Fit a \texttt{DigitsConvNet} on the train dataset
+                            from \texttt{torch\_digits}.  Use CrossEntropyLoss,
+                            an SGD optimizer with learning rate 0.005 and no
+                            momentum, and train your model for 30 epochs with
+                            batch size of 1.  Keep track of your training and
+                            validation loss for the next part.
+                        \item Fit another \texttt{DigitsConvNet}.  This time we
+                            will adjust the learning rate so that it decreases
+                            at each epoch.  Recall the gradient descent update step
+                            $$\vw_{i+1} = \vw_i - \eta_t \nabla_{\vw} F(\vw_i).$$
+                            Here, $i$ is the step, and $t$ is the epoch.
+                            We will update the learning rate at each epoch so
+                            $\eta_{t+1} = \gamma \eta_t$.  You should use
+                            \texttt{torch.optim.lr\_scheduler.ExponentialLR}.  We
+                            will use the a decay rate of $\gamma=0.95$, and
+                            start the learning rate at 0.005.  Save your neural
+                            network to a file using
+                            \texttt{torch.save(model.cpu().state\_dict(),
+                            "conv.pb")}.  You will submit this file to the
+                            autograder.
+                        \item Fit a third \texttt{DigitsConvNet}, again with an
+                            SGD optimizer with learning rate 0.005 and no
+                            momentum.  However, this time, use a batch size of
+                            16. Plot the epochs vs loss for parts (b), (c), and
+                            (d).  Include the plot and your assessment of the
+                            impact of the exponentially decayed learning rate
+                            on training speed.  Additionally, comment on the
+                            impact of increasing batch size. (In your report, may simply leave parts (c) and (d) blank, and include all comments in part (e).)
+                        \item
+                            The last layer of the network can be interpreted as a
+                            linear classifier on top of a \emph{feature
+                            representation} constructed by the earlier layers.
+                            The purpose of this sub-question is to assess the
+                            quality of these features.  Implement the method
+                            \texttt{intermediate}, as specified in the
+                            docstring.  Then, use the function
+                            \texttt{plot\_PCA} (included in the hw2\_utils.py)
+                            to make a scatterplot of your the intermediate
+                            representation of the training data.  (You will
+                            learn about PCA later in the course, but for now,
+                            it is sufficient to know it can be used for
+                            dimensionality reduction.)  Include your plot in
+                            the writeup.  Use your best neural net (according
+                            to validation accuracy) for this plot.
+                        \item Use the feature representation of your training
+                            dataset and labels to create a
+                            \texttt{scipy.spatial.KDTree}.  Then, do
+                            5-nearest-neighbors classification of the the
+                            feature representation of your validation dataset
+                            with the KDTree (this uses the KDTree's
+                            \texttt{query} method).  You should use the same
+                            neural net as in part (f) for this problem.  Report
+                            the accuracy of your KDTree on the validation set.
+                    \end{enumerate}
+                \end{Q}
+                \emph{(Your solution here.)}
+            \end{enumerate}
+
+
+        \end{document}
