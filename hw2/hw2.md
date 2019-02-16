@@ -17,7 +17,7 @@ $$s.t. \sum_{i=1}^ry_i^2\leq 1$$
 So $\max_{||x||_2\leq1}||Ax||_2 = \max \lambda_i$.
 
 
-(b)
+(b)$ $
 
 $$ ||A||_2 = max_{||x||_2=1} ||Ax||_2 $$
 
