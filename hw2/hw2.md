@@ -19,7 +19,7 @@ So $\max_{||x||_2\leq1}||Ax||_2 = \max \lambda_i$.
 
 (b)
 
-$$ ||A||_2 = max ||Ax||_2 where ||x||_2=1$$
+$$ ||A||_2 = \max_{||x||_2\leq1} ||Ax||_2$$
 
 $$ \geq ||A \frac{x}{||x||_2}||_2 $$ 
 
@@ -52,4 +52,5 @@ First, we proof that
  $$\max_{||x||_2\leq1} ||ABx||_2 \leq ||A||_2||Bx||_2\leq ||A||_2 ||B||_2 ||x||_2 = ||A||_2 ||B||_2$$
 
 Then we have
+
 $$||A||_2^2 ||B||_F^2 = \sum_{i=1}^m||A||_2^2||B:,i||_2^2 \geq \sum_{i=1}^m ||AB;,i||_2^2 = ||AB||_F^2$$
