@@ -32,3 +32,11 @@ Assume A = $$\left[begin{array}{cccc}
 a_1&a_2 &\cdots &a_d 
 \end{array}\right]$$
 
+$$\phi (x) =
+\left[
+\begin{array}
+{cccccccccc}
+1&x_1&x_2&x_3&x_1x_1&x_1x_2&x_1x_3&x_2x_2&x_2x_3&x_3x_3
+\end{array}
+\right]^\top
+$$
