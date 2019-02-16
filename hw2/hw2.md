@@ -33,8 +33,12 @@ a_1&a_2 &\cdots &a_d
 \end{array}\right]$
 
 Then $$A^TA = \left[\begin{array}{cccc} 
-a_1^Ta_1&a_1^Ta_2 &\cdots &a_1^Ta_d \
-\vdots &\vdots & \ddots &vdots\
-a_d^Ta_1 &a_d^Ta_2 & \cdots &a_d^a_d
+a_1^Ta_1&a_1^Ta_2 &\cdots &a_1^Ta_d \\
+a_2^Ta_1&a_2^Ta_2 &\cdots &a_2^Ta_d \\
+\vdots &\vdots & \ddots & \vdots\\
+a_d^Ta_1 &a_d^Ta_2 & \cdots &a_d^Ta_d
 \end{array}\right]
 $$
+
+$$tr(A^TA) = \sum_{i=0}^{d} a_i^Ta_i= \sum_{i=1}^{d}\sum_{j=1}^{d}A_{ij}^2$$
+$$Q.E.D$$
