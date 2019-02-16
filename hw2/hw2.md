@@ -45,3 +45,11 @@ $$
 $$tr(A^TA) = \sum_{i=0}^{d} a_i^Ta_i= \sum_{i=1}^{d}\sum_{j=1}^{d}A_{ij}^2$$
 
 $Q.E.D$
+
+
+(d)
+First, we proof that
+ $$\max_{||x||_2\leq1} ||ABx||_2 \leq ||A||_2||Bx||_2\leq ||A||_2 ||B||_2 ||x||_2 = ||A||_2 ||B||_2$$
+
+Then we have
+$$||A||_2^2 ||B||_F^2 = \sum_{i=1}^m||A||_2^2||B:,i||_2^2 \geq \sum_{i=1}^m ||AB;,i||_2^2 = ||AB||_F^2$$
