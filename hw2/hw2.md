@@ -5,7 +5,11 @@ Machine Learning
 (a) Thin SVD of A, $A = USV^T$. Then rewrite  x in terms of V, $x = Vy$. 
 Note that $||x||_2 = x^Tx = y^TV^TVy = ||y||_2 \leq 1$.
 So we have 
+
 $$ ||Ax||_2 =||USV^TVy||_2 = ||USy||_2 = \sqrt{y^TS^TSy}$$
+
 Assume the singular values of A is $\lambda_i, 0 < i \leq r$, then we have 
+
 $$\sqrt{y^TS^TSy} = \sqrt{\sum_i=1^r \lambda_i^2y_i^2} s.t. \sum_i=1^ry_i^2\leq 1$$
+
 So $\max_{||x||_2\leq1}||Ax||_2 = \max \lambda_i$.
