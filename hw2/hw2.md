@@ -41,4 +41,5 @@ a_d^Ta_1 &a_d^Ta_2 & \cdots &a_d^Ta_d
 $$
 
 $$tr(A^TA) = \sum_{i=0}^{d} a_i^Ta_i= \sum_{i=1}^{d}\sum_{j=1}^{d}A_{ij}^2$$
-$$Q.E.D$$
+
+$Q.E.D$
