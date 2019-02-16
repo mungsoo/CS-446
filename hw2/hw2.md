@@ -28,7 +28,7 @@ $$= \frac{||Ax||_2}{||x||_2} $$
 Hence, we have $||A||_2||x||_2 \geq ||Ax||_2$
 
 (c)
-Assume A = $\left[begin{array}{cccc} 
+Assume A = $$\left[begin{array}{cccc} 
 a_1&a_2 &\cdots &a_d 
-\end{array}\right]$
+\end{array}\right]$$
 
