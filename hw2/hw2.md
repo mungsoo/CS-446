@@ -28,6 +28,12 @@ $$= \frac{||Ax||_2}{||x||_2} $$
 Hence, we have $||A||_2||x||_2 \geq ||Ax||_2$
 
 (c)
-Assume A = $$\left[\begin{array}{cccc} 
-a_1&a_2 &\cdots &a_d 
-\end{array}\right]$$
+Assume A = $\left[\begin{array}{cccc} 
+a_1&a_2 &\cdots &a_d
+\end{array}\right]$
+
+Then $$A^TA = \left[\begin{array}{cccc} 
+a_1^Ta_1&a_1^Ta_2 &\cdots &a_1^Ta_d \
+\vdots &\vdots & \ddots &vdots\
+a_d^Ta_1 &a_d^Ta_2 & \cdots &a_d^a_d
+\end{array}\right]
