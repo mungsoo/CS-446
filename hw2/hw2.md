@@ -3,7 +3,7 @@
 Machine Learning
 #### 1 Singular Value Decomposition and norms
 (a) Thin SVD of A, $A = USV^T$. Then rewrite  x in terms of V, $x = Vy$. 
-Note that if $||x||_2 = x^Tx = y^TV^Ty = ||y||_2 \leqq 1$.
+Note that $||x||_2 = x^Tx = y^TV^TVy = ||y||_2 \leqq 1$.
 So we have 
 $$||Ax||_2 =||USV^TVy||_2 = ||USy||_2 = \sqrt{y^TS^TSy}$$
 Assume the singular values of A is $\lambda_i, 0 < i \leqq r$, then we have
