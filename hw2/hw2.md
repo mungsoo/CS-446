@@ -18,10 +18,6 @@ So $\max_{||x||_2\leq1}||Ax||_2 = \max \lambda_i$.
 
 
 (b) 
-
-
-$$||A||_2 = \max_{||x||_{2=1}} ||Ax||_2 \geq ||A\frac{x}{||x||_2}||_2 = \frac{||Ax||_2}{||x||_2}$$
-
-
+$$||A||_2 = \max_{||x||_2=1} ||Ax||_2 \geq ||A\frac{x}{||x||_2}||_2 = \frac{||Ax||_2}{||x||_2}$$
 Hence, we have $||A||_2||x||_2 \geq ||Ax||_2$
 
