@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch.utils.data
 from sklearn.datasets import load_digits
+from sklearn.decomposition import PCA
 
 
 def contour_torch(xmin, xmax, ymin, ymax, M, ngrid = 33):
@@ -49,6 +50,7 @@ def torch_digits():
 def XOR_data():
     X = torch.tensor([[-1., -1.], [1., -1.], [-1., 1.], [1., 1.]])
     Y = (-torch.prod(X, dim=1)+1.)/2 
+    #Y = -torch.prod(X, dim=1)+1.
     return X, Y.view(-1,1)
 
 
