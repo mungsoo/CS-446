@@ -1,0 +1,394 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,commath,dsfont}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{xspace}
+\usepackage{microtype}
+\usepackage[round]{natbib}
+\usepackage{cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{nicefrac}
+
+% following loops stolen from djhsu
+\def\ddefloop#1{\ifx\ddefloop#1\else\ddef{#1}\expandafter\ddefloop\fi}
+\def\ddef#1{\expandafter\def\csname bb#1\endcsname{\ensuremath{\mathbb{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname bf#1\endcsname{\ensuremath{\mathbf{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+% \cA, \cB, ...
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+
+% \vA, \vB, ..., \va, \vb, ...
+\def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\def\SPAN{\textup{span}}
+\def\tu{\textup{u}}
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\def\Z{\mathbb{Z}}
+\def\be{\mathbf{e}}
+\def\nf{\nabla f}
+\def\veps{\varepsilon}
+\def\cl{\textup{cl}}
+\def\inte{\textup{int}}
+\def\dom{\textup{dom}}
+\def\Rad{\textup{Rad}}
+\def\lsq{\ell_{\textup{sq}}}
+\def\hcR{\widehat{\cR}}
+\def\hcRl{\hcR_\ell}
+\def\cRl{\cR_\ell}
+\def\hcE{\widehat{\cE}}
+\def\cEl{\cE_\ell}
+\def\hcEl{\hcE_\ell}
+\def\eps{\epsilon}
+\def\1{\mathds{1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\def\srelu{\sigma_{\textup{r}}}
+\def\vsrelu{\vec{\sigma_{\textup{r}}}}
+\def\vol{\textup{vol}}
+\def\tF{{\scriptscriptstyle\textup{F}}}
+\def\balpha{\boldsymbol{\alpha}}
+\DeclareMathOperator{\tr}{tr}
+\newcommand\T{{\scriptscriptstyle\mathsf{T}}}
+
+\newcommand{\ip}[2]{\left\langle #1, #2 \right \rangle}
+\newcommand{\mjt}[1]{{\color{blue}\emph\textbf{[M:}~#1~\textbf{]}}}
+
+\newtheorem{fact}{Fact}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{condition}{Condition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\newenvironment{Q}
+{%
+\clearpage
+\item
+}
+{%
+\phantom{s}
+\bigskip
+\textbf{Solution.}
+\emph{(Your solution here.)}
+}
+
+\title{CS 446 MJT --- Homework 3}
+\author{\emph{your NetID here}}
+\date{Version 1}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instructions.}
+\begin{itemize}
+    \item
+    Homework is due \textbf{Tuesday, March 12, at 11:59pm}; no late homework accepted.
+
+    \item
+    Everyone must submit individually at gradescope under \texttt{hw3} and \texttt{hw3code}.
+
+    \item
+    The ``written'' submission at \texttt{hw3} \textbf{must be typed}, and submitted in
+    any format gradescope accepts (to be safe, submit a PDF).  You may use \LaTeX, markdown,
+    google docs, MS word, whatever you like; but it must be typed!
+
+    \item
+    When submitting at \texttt{hw3}, gradescope will ask you to mark out boxes
+    around each of your answers; please do this precisely!
+
+    \item
+    Please make sure your NetID is clear and large on the first page of the homework.
+
+    \item
+    Your solution \textbf{must} be written in your own words.
+    Please see the course webpage for full academic integrity information.
+    Briefly, you may have high-level discussions with at most 3 classmates,
+    whose NetIDs you should place on the first page of your solutions,
+    and you should cite any external reference you use; despite all this,
+    your solution must be written in your own words.
+
+    \item
+    We reserve the right to reduce the auto-graded score for \texttt{hw3code}
+    if we detect funny business (e.g., rather than implementing an algorithm,
+    you keep re-submitting the assignment to the auto-grader, eventually completing
+    a binary search for the answers).
+
+    \item
+    There are \textbf{no regrade requests} on \texttt{hw3code}, which is the code auto-grader;
+    however, you can re-submit and re-grade as many times as you like before the deadline!
+    Start early and report any issues on piazza!
+
+    \item
+    Methods and functions in the template and utility code include
+    docstrings describing the inputs and outputs.  The autograder
+    relies on correct implementations of these methods.  Follow the
+    docstrings to avoid failing tests.
+
+\end{itemize}
+
+\begin{enumerate}
+
+\begin{Q}
+    \textbf{The ln-sum-exp and cross entropy.}
+    \begin{enumerate}
+        \item Given $\vz\in \mathbb{R}^k$, prove that $g(\vz)=\ln \sum_{j=1}^{k}\exp(z_j)$ is convex.
+
+        \textbf{Hint:} prove that the Hessian matrix is positive semi-definite, meaning $\nabla^2g(\vz)\succeq0$.
+
+        \item Recall that given a data example $(\vx,y)$ where $\vx\in \mathbb{R}^d$ and $y\in\{1,2,\ldots,k\}$,
+        and a classifier $f:\mathbb{R}^d\to \mathbb{R}^k$, the cross entropy loss is defined as
+        \begin{align*}
+            \ell_{\mathrm{ce}}\del{f(\vx),y}=-\ln\del{\frac{\exp\del{f(\vx)_y}}{\sum_{j=1}^{k}\exp\del{f(\vx)_j}}}=-f(\vx)_y+\ln\sum_{j=1}^{k}\exp\del{f(\vx)_j}.
+        \end{align*}
+        Let data examples $\del{\del{\vx_i,y_i}}_{i=1}^n$ be given, where $\vx_i\in \mathbb{R}^d$ and $y_i\in\{1,2,\ldots,k\}$. Consider the linear predictor $\vx\mapsto\vW\vx$, where $\vW\in \mathbb{R}^{k\times d}$.  Prove that the empirical risk
+        \begin{align*}
+            \hcR(\vW)=\frac{1}{n}\sum_{i=1}^{n}\ell_{\mathrm{ce}}\del{\vW\vx,y}
+        \end{align*}
+        is convex.
+
+        \textbf{Hint:} use part (a) and the fact that convexity is preserved under affine composition and nonnegative combination.
+        (It doesn't matter that this part uses matrix variables; this affine composition property holds for convex functions
+        over matrices, and then when applying the previous part, its input is a vector after the affine transformation.)
+
+        \item For $\vz\in \mathbb{R}^k$ and $r>0$, let $g_r(\vz)=\frac{1}{r}\ln \sum_{j=1}^{k}\exp(rz_j)$. Prove that
+        \begin{align*}
+            \lim_{r\to\infty}g_r(\vz)=\max_{1\le j\le k}z_j.
+        \end{align*}
+
+      \item
+        As a corollary, for $z\in \mathbb{R}$ and $r>0$, the logistic loss $\ell(z)=\ln(1+\exp(-z))$, and $\ell_r(z)=\frac{1}{r}\ln(1+\exp(-rz))$, prove that
+        \begin{align*}
+            \lim_{r\to\infty}\ell_r(z)=\max\{0,-z\}=\mathrm{ReLU}(-z).
+        \end{align*}
+    \end{enumerate}
+\end{Q}
+
+\begin{Q}
+    \textbf{On initialization.}
+
+    Consider a 2-layer network
+    \begin{align*}
+        f(\vx;\vW,\vv)=\sum_{j=1}^{m}v_j\sigma\del{\langle\vw_j,\vx\rangle},
+    \end{align*}
+    where $\vx\in \mathbb{R}^d$, $\vW\in \mathbb{R}^{m\times d}$ with rows $\vw_j^\top$, and $\vv\in \mathbb{R}^m$. For simplicity, the network has a single output, and bias terms are omitted.
+
+    Given a data example $(\vx,y)$ and a loss function $\ell$, consider the empirical risk
+    \begin{align*}
+        \hcR(\vW,\vv)=\ell\del{f(\vx;\vW,\vv),y}.
+    \end{align*}
+    Only a single data example will be considered in this problem;
+    the same analysis extends to multiple examples by taking averages.
+
+    \begin{enumerate}
+        \item For each $1\le j\le m$, derive $\partial\hcR/\partial v_j$ and $\partial\hcR/\partial \vw_j$.
+
+        \item Consider gradient descent which starts from some $\vW^{(0)}$ and $\vv^{(0)}$, and at step $t\ge0$, updates the weights for each $1\le j\le m$ as follows:
+        \begin{align*}
+            \vw_j^{(t+1)}=\vw_j^{(t)}-\eta \frac{\partial\hcR}{\partial \vw_j^{(t)}},\qquad \mathrm{and}\qquad v_j^{(t+1)}=v_j^{(t)}-\eta \frac{\partial\hcR}{\partial v_j^{(t)}}.
+        \end{align*}
+
+        Suppose there exists two hidden units $p,q\in\{1,2,\ldots,m\}$ such that $\vw_p^{(0)}=\vw_q^{(0)}$ and $v_p^{(0)}=v_q^{(0)}$. Prove by induction that for any step $t\ge0$, it holds that $\vw_p^{(t)}=\vw_q^{(t)}$ and $v_p^{(t)}=v_q^{(t)}$.
+
+        \textbf{Remark:} as a result, if the neural network is initialized symmetrically, then such a symmetry may persist during gradient descent, and thus the representation power of the network will be limited.
+
+        \item Random initialization is a good way to break symmetry. Moreover, proper random initialization also preserves the squared norm of the input, as formalized below.
+
+        First consider the identity activation $\sigma(z)=z$. For each $1\le j\le m$ and $1\le k\le d$, initialize $w_{j,k}^{(0)}\sim\cN(0,1/m)$ (i.e., normal distribution with mean $\mu=0$ and variance $\sigma^2=1/m$).
+        Prove that
+        \begin{align*}
+            \mathbb{E}\sbr[2]{\,\enVert[1]{\vW^{(0)}\vx}_2^2\,}=\|\vx\|_2^2.
+        \end{align*}
+
+        Next consider the ReLU activation $\sigma_r(z)=\max\{0,z\}$. For each $1\le j\le m$ and $1\le k\le d$, initialize $w_{j,k}^{(0)}\sim\cN(0,2/m)$. Prove that
+        \begin{align*}
+            \mathbb{E}\sbr[2]{\,\enVert[1]{\sigma_r(\vW^{(0)}\vx)}_2^2\,}=\|\vx\|_2^2.
+        \end{align*}
+
+        \textbf{Hint:} linear combinations of Gaussians are again Gaussian!
+        For the second part (with ReLU), consider the symmetry of a Gaussian around 0.
+    \end{enumerate}
+\end{Q}
+
+\begin{Q}
+    \textbf{ResNet.}
+
+    In this problem, you will implement a simplified ResNet. You do not need to change arguments which are not mentioned here (but you of course could try and see what happens).
+    \begin{enumerate}
+        \item Implement a class \texttt{Block}, which is a building block of ResNet. It is described in \citep{resnet} Figure 2.
+
+        The input to \texttt{Block} is of shape $(N,C,H,W)$, where $N$ denotes the batch size, $C$ denotes the number of channels, and $H$ and $W$ are the height and width of each channel. For each data example $\vx$ with shape $(C,H,W)$, the output of \texttt{block} is
+        \begin{align*}%\label{eq:block}
+            \texttt{Block}(\vx)=\sigma_r\del{\vx+f(\vx)},
+        \end{align*}
+        where $\sigma_r$ denotes the ReLU activation, and $f(\vx)$ also has shape $(C,H,W)$ and thus can be added to $\vx$. In detail, $f$ contains the following layers.
+        \begin{enumerate}
+            \item A \texttt{Conv2d} with $C$ input channels, $C$ output channels, kernel size 3, stride 1, padding 1, and no bias term.
+            \item A \texttt{BatchNorm2d} with $C$ features.
+            \item A ReLU layer.
+            \item Another \texttt{Conv2d} with the same arguments as i above.
+            \item Another \texttt{BatchNorm2d} with $C$ features.
+        \end{enumerate}
+        Because $3\times3$ kernels and padding 1 are used, the convolutional layers do not change the shape of each channel. Moreover, the number of channels are also kept unchanged. Therefore $f(\vx)$ does have the same shape as $\vx$.
+
+        Additional instructions are given in doscstrings in \texttt{hw3.py}.
+
+        \item Explain why a \texttt{Conv2d} layer does not need a bias term if it is followed by a \texttt{BatchNorm2d} layer.
+
+        \item Implement a (shallow) \texttt{ResNet} consists of the following parts:
+        \begin{enumerate}
+            \item A \texttt{Conv2d} with 1 input channel, $C$ output channels, kernel size 3, stride 2, padding 1, and no bias term.
+            \item A \texttt{BatchNorm2d} with $C$ features.
+            \item A ReLU layer.
+            \item A \texttt{MaxPool2d} with kernel size 2.
+            \item A \texttt{Block} with $C$ channels.
+            \item An \texttt{AdaptiveAvgPool2d} which for each channel takes the average of all elements.
+            \item A \texttt{Linear} with $C$ inputs and 10 outputs.
+        \end{enumerate}
+        Additional instructions are given in doscstrings in \texttt{hw3.py}.
+
+        \item Train a \texttt{ResNet} with 16 channels on the data given by \texttt{hw3\_utils.torch\_digits()}, using the cross entropy loss and SGD with learning rate 0.005 and batch size 16, for 30 epochs. You can just use your \texttt{fit\_and\_validate()} in \texttt{hw2}. Plot the epochs vs training and validation cross entropy losses. Since there is some inconsistency due to random initialization, try 3 runs and have 3 plots.
+    \end{enumerate}
+\end{Q}
+
+% \bigskip
+%
+% Here is a summary of what the real ResNet does.
+% \begin{itemize}
+%     \item More channels are used. The input image usually have 3 channels, and the first convolutional layer of a typical ResNet has 64 output channels.
+%
+%     \item The function $f$ in \cref{eq:block} may have different output shape from the input shape. Sometimes $f$ contains a convolutional layer with stride 2, and thus each channel of the output of $f$ has a smaller size. In this case, we also need to provide a corresponding function \texttt{down\_sample}, such that $\texttt{down\_sample}(\vx)$ and $f(\vx)$ have the same shape. \texttt{down\_sample} is usually a convolutional layer with kernel size 1 and stride 2.
+%
+%     Each time a stride 2 is used, usually the number of channels is also doubled. It preserves the time complexity at each layer, and is believed to be good in practice.
+%
+%     \item Much more blocks are stacked together than here. In \citet{resnet}, the smallest ResNet-18 have 8 blocks and 18 layers in total, while the largest ResNet-152 have 50 blocks and 152 layers in total. (The block structure in ResNet-152 is also different.)
+% \end{itemize}
+
+\begin{Q}
+    \textbf{Kernel properties.}
+
+    \begin{enumerate}
+        \item Let $\vA\in \mathbb{R}^{n\times n}$ denote a symmetric positive semi-definite matrix of rank $r$. Prove that there exists $n$ vectors $\vz_1,\vz_2,\ldots,\vz_n\in \mathbb{R}^r$, such that $A_{i,j}=\langle \vz_i,\vz_j\rangle$.
+
+        \textbf{Hint:} use the eigendecomposition $\vA=\vU\boldsymbol{\Lambda}\vU^\top$.
+
+        \item On the other hand, given $n$ vectors $\vz_1,\vz_2,\ldots,\vz_n\in \mathbb{R}^m$, prove that the matrix $\vA$ defined by $A_{i,j}=\langle\vz_i,\vz_j\rangle$ is positive semi-definite.
+
+        \textbf{Remark:} note that the rank of $\vA$ is at most $m$, and it could be strictly less than $m$. In particular, $m$ could be larger than $n$.
+
+        \item Using (a) and (b), prove that if $K_1(\vx,\vy)$ and $K_2(\vx,\vy)$ are kernels, then $K(\vx,\vy)=K_1(\vx,\vy) K_2(\vx,\vy)$ is also a kernel.
+
+        \item Using (c), prove that $K(\vx,\vy)=(1+\langle\vx,\vy\rangle)^r$ is a kernel for any positive integer $r$. (It is the polynomial kernel with degree $r$.)
+
+        \item Assume $K(\vx,\vy)=\exp(-\|\vx-\vy\|_2^2/2\sigma^2)$ is a kernel in the 1-dimensional case (i.e., $x,y\in \mathbb{R}$). Using (c), prove that $K(\vx,\vy)$ is indeed a kernel for any dimension. (It is the Gaussian / RBF kernel.)
+    \end{enumerate}
+\end{Q}
+
+\begin{Q}
+    \textbf{RBF kernel and nearest neighbors.}
+    \begin{enumerate}
+        \item Recall that given data examples $((\vx_i,y_i))_{i=1}^n$ and an optimal dual solution $(\hat{\alpha}_i)_{i=1}^n$, the RBF kernel SVM makes a prediction as follows:
+        \begin{align*}
+            f_{\sigma}(\vx)=\sum_{i=1}^{n}\hat{\alpha}_iy_i\exp\del{-\frac{\|\vx-\vx_i\|_2^2}{2\sigma^2}}=\sum_{i\in S}^{}\hat{\alpha}_iy_i\exp\del{-\frac{\|\vx-\vx_i\|_2^2}{2\sigma^2}},
+        \end{align*}
+        where $S\subset\{1,2,\ldots,n\}$ is the set of indices of support vectors.
+
+        Given an input $\vx$, let $T:=\argmin_{i\in S}\|\vx-\vx_i\|_2$ denote the set of closest support vectors to $\vx$, and let $\rho:=\min_{i\in S}\|\vx-\vx_i\|_2$ denote this smallest distance.  (In other words, $T := \{ i \in S : \|\vx-\vx_i\| = \rho \}$.) Prove that
+        \begin{align*}
+            \lim_{\sigma\to0}\frac{f_{\sigma}(\vx)}{\exp\del{-\rho^2/2\sigma^2}}=\sum_{i\in T}^{}\hat{\alpha}_iy_i.
+        \end{align*}
+
+        \textbf{Remark:} in other words, when the bandwidth $\sigma$ becomes small enough, RBF kernel SVM is almost the 1-nearest neighbor predictor with the set of support vectors as the training set.
+
+        \item Consider the XOR dataset:
+        \begin{align*}
+            \vx_1=(+1,+1),\quad y_1=+1, \\
+            \vx_2=(-1,+1),\quad y_2=-1, \\
+            \vx_3=(-1,-1),\quad y_3=+1, \\
+            \vx_4=(+1,-1),\quad y_4=-1.
+        \end{align*}
+        Verify that $\hat{\balpha}=(1/\alpha,1/\alpha,1/\alpha,1/\alpha)$ is an optimal dual solution to the RBF kernel SVM, where
+        \begin{align*}
+            \alpha=\del{1-\exp\del{-\frac{\|\vx_1-\vx_2\|_2^2}{2\sigma^2}}}^2=\del{1-\exp\del{-\frac{2}{\sigma^2}}}^2>0.
+        \end{align*}
+
+        \textbf{Hint:} prove that the gradient of the dual function is $\boldsymbol{0}$ at $\hat{\balpha}$. Since the dual function is concave, and $\hat{\balpha}>\boldsymbol{0}$, it follows that $\hat{\balpha}$ is an optimal dual solution.
+
+        \textbf{Remark:} in other words, all four data examples are mapped to support vectors in the reproducing kernel Hilbert space. In light of (a), when $\sigma$ is small enough, $f_{\sigma}(\vx)$ is almost the 1-nearest neighbor predictor on the XOR dataset. In fact, it is also true for large $\sigma$, due to the symmetry of the XOR data.
+    \end{enumerate}
+\end{Q}
+
+\begin{Q}
+    \textbf{SVM implementation.}
+
+    Recall that the dual problem of SVM is
+    \begin{align*}
+        \max_{\balpha\in\cC}\sum_{i=1}^{n}\alpha_i-\frac{1}{2}\sum_{i,j=1}^{n}\alpha_i\alpha_jy_iy_jK(\vx_i,\vx_j).
+    \end{align*}
+    where the domain $\cC=[0,\infty)^n=\{\balpha:\alpha_i\ge0\}$ for hard-margin SVM, and $\cC=[0,C]^n=\{\balpha:0\le\alpha_i\le C\}$ for soft-margin SVM.
+
+    Equivalently, it can be formulated as a minimization problem
+    \begin{align*}
+        \min_{\balpha\in\cC}f(\balpha):=\frac{1}{2}\sum_{i,j=1}^{n}\alpha_i\alpha_jy_iy_jK(\vx_i,\vx_j)-\sum_{i=1}^{n}\alpha_i.
+    \end{align*}
+    It can be solved by projected gradient descent, which starts from some $\balpha_0\in\cC$ (e.g., $\boldsymbol{0}$) and updates as follows
+    \begin{align*}
+        \balpha_{t+1}=\Pi_{\cC}\sbr{\balpha_t-\eta\nabla f(\balpha_t)}.
+    \end{align*}
+    Here $\Pi_{\cC}[\balpha]$ is the \emph{projection} of $\balpha$ onto $\cC$, defined as the closet point to $\balpha$ in $\cC$:
+    \begin{align*}
+        \Pi_{\cC}[\balpha]:=\argmin_{\balpha'\in\cC}\|\balpha'-\balpha\|_2.
+    \end{align*}
+    If $\cC$ is convex, the projection is uniquely defined.
+
+    \begin{enumerate}
+        \item Prove that
+        \begin{align*}
+            \del{\Pi_{[0,\infty)^n}[\balpha]}_i=\max\{\alpha_i,0\},
+        \end{align*}
+        and
+        \begin{align*}
+            \del{\Pi_{[0,C]^n}[\balpha]}_i=\min\{\max\{0,\alpha_i\},C\}.
+        \end{align*}
+
+        \item Implement an \texttt{svm\_solver()}, using projected gradient descent formulated as above. See the docstrings in \texttt{hw3.py} for details.
+
+        \item Implement an \texttt{svm\_predictor()}, using an optimal dual solution, the training set, and an input. See the docstrings in \texttt{hw3.py} for details.
+
+        \item On the area $[-5,5]\times[-5,5]$, plot the contour lines of the following kernel SVMs, trained on the XOR data. Different kernels and the XOR data are provided in \texttt{hw3\_utils.py}. Learning rate 0.1 and 10000 steps should be enough. To draw the contour lines, you can use \texttt{hw3.svm\_contour()}.
+        \begin{itemize}
+            \item The polynomial kernel with degree $2$.
+            \item The RBF kernel with $\sigma=1$.
+            \item The RBF kernel with $\sigma=2$.
+            \item The RBF kernel with $\sigma=4$.
+        \end{itemize}
+
+    \end{enumerate}
+\end{Q}
+\end{enumerate}
+
+\newpage
+
+\bibliography{bib}
+\bibliographystyle{plainnat}
+
+\end{document}
