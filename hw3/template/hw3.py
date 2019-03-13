@@ -1,5 +1,5 @@
+from hw3_utils import loss_batch, xor_data, rbf
 import hw3_utils
-from hw3_utils import loss_batch
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -33,26 +33,27 @@ def svm_solver(x_train, y_train, lr, num_iters,
     You will then need to use alpha.requires_grad_().
     Alternatively, use in-place operations such as clamp_().
     """
-    alpha = nn.Linear(x_train.size(0), 1, bias=False)
+    alpha = torch.zeros((1, x_train.size(0)), requires_grad=True)
     N = x_train.size(0)
     Q = torch.empty((N, N))
-    with torch.no_grad():
-        for i in range(N):
-            for j in range(N):
-                Q[i][j] = kernel(x_train[i], x_train[j]) * y_train[i] * y_train[j]
-         
-    def loss_func(alpha):
-        return 0.5 * alpha(alpha(Q).transpose(1, 0)) - alpha.weight.sum()
+
+    for i in range(N):
+        for j in range(N):
+             Q[i][j] = kernel(x_train[i], x_train[j]) * y_train[i] * y_train[j]
     
-    sgd = torch.optim.SGD(alpha.parameters(), lr=lr)
+    def loss_func():
+        return 0.5 * alpha @ Q @ alpha.transpose(1, 0) - alpha.sum()
+    sgd = torch.optim.SGD([alpha], lr=lr)
     
     for iter in range(num_iters):
-        loss = loss_func(alpha)
+        loss = loss_func()
         loss.backward()
         sgd.step()
         sgd.zero_grad()
-    print(alpha.weight.shape)
-    return alpha.weight
+        with torch.no_grad():
+            alpha.clamp_(min=0, max=c)
+    
+    return alpha
 
 
 def svm_predictor(alpha, x_train, y_train, x_test,
@@ -70,8 +71,18 @@ def svm_predictor(alpha, x_train, y_train, x_test,
     Return:
         A 1d tensor with shape (m,), the outputs of SVM on the test set.
     """
-    return torch.zeros(x_test.size(0))
+    
+    # Do I need to cut off very small alpha to 0?
+    N = x_train.size(0)
+    M = x_test.size(0)
+    Q = torch.empty((N, M))
 
+    for i in range(N):
+        for j in range(M):
+             Q[i][j] = kernel(x_test[j], x_train[i]) * y_train[i]
+             
+    return alpha @ Q
+        
 
 def svm_contour(alpha, x_train, y_train, kernel,
                 xmin=-5, xmax=5, ymin=-5, ymax=5, ngrid = 33):
@@ -144,7 +155,14 @@ class Block(nn.Module):
             self.conv2.weight = nn.Parameter(kernel_2)
             self.bn2.weight = nn.Parameter(bn2_weight)
             self.bn2.bias = nn.Parameter(bn2_bias)
-
+        
+        # It seems without no_grad() it also works
+        # self.conv1.weight = nn.Parameter(kernel_1)
+        # self.bn1.weight = nn.Parameter(bn1_weight)
+        # self.bn1.bias = nn.Parameter(bn1_bias)
+        # self.conv2.weight = nn.Parameter(kernel_2)
+        # self.bn2.weight = nn.Parameter(bn2_weight)
+        # self.bn2.bias = nn.Parameter(bn2_bias)
 
 class ResNet(nn.Module):
     """A simplified ResNet."""
@@ -263,3 +281,26 @@ def fit_and_validate(net, optimizer, loss_func, train, val, n_epochs, batch_size
 # plt.plot(range(len(validation_epoch_loss)), validation_epoch_loss, label='val_loss')
 # plt.legend()
 # plt.show()
+
+
+#P6
+x_train, y_train = xor_data()
+# alpha = svm_solver(x_train, y_train, lr=0.1, num_iters=10000,
+               # kernel=hw3_utils.poly(degree=2), c=None)
+# svm_contour(alpha, x_train, y_train, kernel=hw3_utils.poly(degree=2),
+                # xmin=-5, xmax=5, ymin=-5, ymax=5, ngrid = 33)
+                
+alpha = svm_solver(x_train, y_train, lr=0.1, num_iters=10000,
+               kernel=hw3_utils.poly(degree=2), c=None)
+svm_contour(alpha, x_train, y_train, kernel=rbf(sigma=1),
+                xmin=-5, xmax=5, ymin=-5, ymax=5, ngrid = 33)
+                
+alpha = svm_solver(x_train, y_train, lr=0.1, num_iters=10000,
+               kernel=hw3_utils.poly(degree=2), c=None)
+svm_contour(alpha, x_train, y_train, kernel=rbf(sigma=2),
+                xmin=-5, xmax=5, ymin=-5, ymax=5, ngrid = 33)
+                
+alpha = svm_solver(x_train, y_train, lr=0.1, num_iters=10000,
+               kernel=hw3_utils.poly(degree=2), c=None)
+svm_contour(alpha, x_train, y_train, kernel=rbf(sigma=4),
+                xmin=-5, xmax=5, ymin=-5, ymax=5, ngrid = 33)
