@@ -1,0 +1,244 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,commath,dsfont}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{xspace}
+\usepackage{microtype}
+\usepackage[round]{natbib}
+\usepackage{cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{nicefrac}
+
+% following loops stolen from djhsu
+\def\ddefloop#1{\ifx\ddefloop#1\else\ddef{#1}\expandafter\ddefloop\fi}
+\def\ddef#1{\expandafter\def\csname bb#1\endcsname{\ensuremath{\mathbb{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname bf#1\endcsname{\ensuremath{\mathbf{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+% \cA, \cB, ...
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+
+% \vA, \vB, ..., \va, \vb, ...
+\def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+
+% \valpha, \vbeta, ...,  \vGamma, \vDelta, ...,
+\def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{\csname #1\endcsname}}}}
+\ddefloop {alpha}{beta}{gamma}{delta}{epsilon}{varepsilon}{zeta}{eta}{theta}{vartheta}{iota}{kappa}{lambda}{mu}{nu}{xi}{pi}{varpi}{rho}{varrho}{sigma}{varsigma}{tau}{upsilon}{phi}{varphi}{chi}{psi}{omega}{Gamma}{Delta}{Theta}{Lambda}{Xi}{Pi}{Sigma}{varSigma}{Upsilon}{Phi}{Psi}{Omega}{ell}\ddefloop
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\def\SPAN{\textup{span}}
+\def\tu{\textup{u}}
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\def\Z{\mathbb{Z}}
+\def\be{\mathbf{e}}
+\def\nf{\nabla f}
+\def\veps{\varepsilon}
+\def\cl{\textup{cl}}
+\def\inte{\textup{int}}
+\def\dom{\textup{dom}}
+\def\Rad{\textup{Rad}}
+\def\lsq{\ell_{\textup{sq}}}
+\def\hcR{\widehat{\cR}}
+\def\hcRl{\hcR_\ell}
+\def\cRl{\cR_\ell}
+\def\hcE{\widehat{\cE}}
+\def\cEl{\cE_\ell}
+\def\hcEl{\hcE_\ell}
+\def\eps{\epsilon}
+\def\1{\mathds{1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\def\srelu{\sigma_{\textup{r}}}
+\def\vsrelu{\vec{\sigma_{\textup{r}}}}
+\def\vol{\textup{vol}}
+\def\tF{{\scriptscriptstyle\textup{F}}}
+\def\balpha{\boldsymbol{\alpha}}
+\DeclareMathOperator{\tr}{tr}
+\newcommand\T{{\scriptscriptstyle\mathsf{T}}}
+\def\VC{\textsf{VC}}
+
+\newcommand{\ip}[2]{\left\langle #1, #2 \right \rangle}
+\newcommand{\mjt}[1]{{\color{blue}\emph\textbf{[M:}~#1~\textbf{]}}}
+
+\newtheorem{fact}{Fact}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{condition}{Condition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\newenvironment{Q}
+{%
+\clearpage
+\item
+}
+{%
+\phantom{s}
+\bigskip
+\textbf{Solution.}
+\emph{(Your solution here.)}
+}
+
+\title{CS 446 MJT --- Homework 4}
+\author{\emph{your NetID here}}
+\date{Version 2}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instructions.}
+\begin{itemize}
+    \item
+    Homework is due \textbf{Tuesday, April 2, at 11:59pm}; no late homework accepted.
+
+    \item
+    Everyone must submit individually at gradescope under \texttt{hw4}.
+    (There is no \texttt{hw4code}!)
+
+    \item
+    The ``written'' submission at \texttt{hw4} \textbf{must be typed}, and submitted in
+    any format gradescope accepts (to be safe, submit a PDF).  You may use \LaTeX, markdown,
+    google docs, MS word, whatever you like; but it must be typed!
+
+    \item
+    When submitting at \texttt{hw4}, gradescope will ask you to mark out boxes
+    around each of your answers; please do this precisely!
+
+    \item
+    Please make sure your NetID is clear and large on the first page of the homework.
+
+    \item
+    Your solution \textbf{must} be written in your own words.
+    Please see the course webpage for full academic integrity information.
+    Briefly, you may have high-level discussions with at most 3 classmates,
+    whose NetIDs you should place on the first page of your solutions,
+    and you should cite any external reference you use; despite all this,
+    your solution must be written in your own words.
+
+\end{itemize}
+
+\begin{enumerate}
+
+\begin{Q}
+  \textbf{VC dimension.}
+
+  This problem will show that two different classes of predictors have infinite VC dimension.
+
+  \textbf{Hint:} to prove infinite $\VC(\cH) = \infty$, it is usually most convenient
+  to show $\VC(\cH)\geq n$ for all $n$.
+
+  \begin{enumerate}
+    \item
+      Let $\cF := \cbr{ \vx \mapsto 2\cdot\1[ \vx \in C ]-1 : C\subseteq \R^d \textup{ is convex} }$
+      denote the set of all classifiers whose decision boundary is a convex subset of $\R^d$ for $d\geq 2$.
+      Prove $\VC(\cF) = \infty$.
+
+      \textbf{Hint:} Consider data examples on the unit sphere $\{\vx\in \mathbb{R}^d : \|\vx\|=1\}$.
+
+    \item
+      Given $x\in \mathbb{R}$, let $\mathrm{sgn}$ denote the sign of $x$:
+      $\mathrm{sgn}(x)=1$ if $x\ge0$ while $\mathrm{sgn}(x)=-1$ if $x<0$.
+
+      Let $\sigma > 0$ be given, and define $\cG_\sigma$ to be the set of (sign of) all RBF
+      classifiers with bandwidth $\sigma$, meaning
+      \[
+        \cG_\sigma := \cbr{ \vx \mapsto \mathrm{sgn}\del{\sum_{i=1}^m \alpha_i \exp\del{-\|\vx-\vx_i\|^2/(2\sigma^2)}} : \
+          m \in \Z_{\geq 0},\ \vx_1,\ldots,\vx_m\in \R^d,\ \valpha \in \R^m }.
+      \]
+      Prove $\VC(\cG_\sigma) = \infty$.
+
+      \textbf{Remark:} the sign of 0 is not important:
+      you have the freedom to choose some nice data examples and avoid this case.
+
+      \textbf{Hint:} remember in \texttt{hw3} it is proved that if $\sigma$ is small enough,
+      the RBF kernel SVM is close to the 1-nearest neighbor predictor.
+      In this problem, $\sigma$ is fixed, but you have the freedom to choose the data examples.
+      If the distance between data examples is large enough, the RBF kernel SVM could still
+      be close to the 1-nearest neighbor predictor. Make sure to have an explicit construction
+      of such a dataset.
+  \end{enumerate}
+\end{Q}
+
+
+\begin{Q}
+    \textbf{Rademacher complexity of linear predictors.}
+
+    Let examples $(\vx_1,\ldots,\vx_n)$ be given with $\|\vx_i\| \leq R$,
+    along with linear functions $\cbr{ \vx \mapsto \vw^\T\vx : \|\vw\|\leq W }$.
+    The goal in this problem is to show $\Rad(\cF) \leq \nicefrac{RW}{\sqrt{n}}$.
+
+    \begin{enumerate}
+      \item
+        For a fixed sign vector $\veps \in \{-1,+1\}^n$, define $\vx_{\veps} := \frac 1 n \sum_{i=1}^n
+        \vx_i \eps_i$.
+        Show
+        \[
+          \max_{f\in\cF} \frac 1 n \sum_{i=1}^n \eps_i f(\vx_i) \leq W \|\vx_{\veps}\|.
+        \]
+        \textbf{Hint:} Cauchy-Schwarz!
+
+      \item
+        Show $\displaystyle \bbE_{\veps} \|\vx_{\veps}\|^2 \leq \nicefrac {R^2} n$.
+
+      \item
+        Now combine the pieces to show
+        $\displaystyle
+          \Rad(\cF) \leq \nicefrac {RW}{\sqrt{n}}.
+        $
+
+        \textbf{Hint:} one missing piece is to write $\|\cdot\| = \sqrt{\|\cdot\|^2}$ and
+        use Jensen's inequality.
+    \end{enumerate}
+\end{Q}
+
+
+\begin{Q}
+    \textbf{Generalization bounds for a few linear predictors.}
+
+    In this problem, it is always assumed that for any $(\vx,y)$ sampled from the distribution,
+    $\|\vx\|\le R$ and $y\in\{-1,+1\}$.
+
+    Consider the following version of the soft-margin SVM:
+    \begin{align*}
+        \min_{\vw\in \mathbb{R}^d}\quad\frac{\lambda}{2}\|\vw\|^2+\frac{1}{n}\sum_{i=1}^{n}\sbr{1-\vw^{\top}\vx_iy_i}_+=\frac{\lambda}{2}\|\vw\|^2+\hcR_{\mathrm{hinge}}(\vw).
+    \end{align*}
+    Let $\hat{\vw}$ denote the (unique!) optimal solution, and $\hat{f}(\vx)=\hat{\vw}^{\top}\vx$.
+
+        Prove that for any regularization level $\lambda>0$,
+        with probability at least $1-\delta$,
+        it holds that
+        \[
+          \cR(\hat f) \leq \hcR(\hat f) +  R\sqrt{\frac 8 {\lambda n}}
+          + 3 \del{ 1 + R\sqrt{\nicefrac 2 \lambda} } \sqrt{\frac{\ln(2/\delta)}{2n}}.
+        \]
+
+        \textbf{Hint}: use the fact from slide 5/61 of the first ML Theory lecture
+        that $\|\hat{\vw}\|\leq \sqrt{2/\lambda}$,
+          the linear predictor Rademacher complexity bound from the previous problem,
+          and the Rademacher generalization theorem on slide 57 of the final theory lecture.
+          
+\end{Q}
+
+\end{enumerate}
+
+% \bibliography{bib}
+% \bibliographystyle{plainnat}
+
+\end{document}
