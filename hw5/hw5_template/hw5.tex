@@ -1,0 +1,257 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,commath,dsfont}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{xspace}
+\usepackage{microtype}
+\usepackage[round]{natbib}
+\usepackage{cleveref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{nicefrac}
+
+% following loops stolen from djhsu
+\def\ddefloop#1{\ifx\ddefloop#1\else\ddef{#1}\expandafter\ddefloop\fi}
+\def\ddef#1{\expandafter\def\csname bb#1\endcsname{\ensuremath{\mathbb{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+\def\ddef#1{\expandafter\def\csname bf#1\endcsname{\ensuremath{\mathbf{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+% \cA, \cB, ...
+\def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+
+% \vA, \vB, ..., \va, \vb, ...
+\def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{#1}}}}
+\ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+
+% \valpha, \vbeta, ...,  \vGamma, \vDelta, ...,
+\def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{\csname #1\endcsname}}}}
+\ddefloop {alpha}{beta}{gamma}{delta}{epsilon}{varepsilon}{zeta}{eta}{theta}{vartheta}{iota}{kappa}{lambda}{mu}{nu}{xi}{pi}{varpi}{rho}{varrho}{sigma}{varsigma}{tau}{upsilon}{phi}{varphi}{chi}{psi}{omega}{Gamma}{Delta}{Theta}{Lambda}{Xi}{Pi}{Sigma}{varSigma}{Upsilon}{Phi}{Psi}{Omega}{ell}\ddefloop
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\def\SPAN{\textup{span}}
+\def\tu{\textup{u}}
+\def\R{\mathbb{R}}
+\def\E{\mathbb{E}}
+\def\Z{\mathbb{Z}}
+\def\be{\mathbf{e}}
+\def\nf{\nabla f}
+\def\veps{\varepsilon}
+\def\cl{\textup{cl}}
+\def\inte{\textup{int}}
+\def\dom{\textup{dom}}
+\def\Rad{\textup{Rad}}
+\def\lsq{\ell_{\textup{sq}}}
+\def\hcR{\widehat{\cR}}
+\def\hcRl{\hcR_\ell}
+\def\cRl{\cR_\ell}
+\def\hcE{\widehat{\cE}}
+\def\cEl{\cE_\ell}
+\def\hcEl{\hcE_\ell}
+\def\eps{\epsilon}
+\def\1{\mathds{1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\def\srelu{\sigma_{\textup{r}}}
+\def\vsrelu{\vec{\sigma_{\textup{r}}}}
+\def\vol{\textup{vol}}
+\def\tF{{\scriptscriptstyle\textup{F}}}
+\def\balpha{\boldsymbol{\alpha}}
+\DeclareMathOperator{\tr}{tr}
+\newcommand\T{{\scriptscriptstyle\mathsf{T}}}
+\def\VC{\textsf{VC}}
+
+\newcommand{\ip}[2]{\left\langle #1, #2 \right \rangle}
+\newcommand{\mjt}[1]{{\color{blue}\emph\textbf{[M:}~#1~\textbf{]}}}
+
+\newtheorem{fact}{Fact}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{condition}{Condition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{example}{Example}
+
+\newenvironment{Q}
+{%
+\clearpage
+\item
+}
+{%
+\phantom{s}
+\bigskip
+\textbf{Solution.}
+\emph{(Your solution here.)}
+}
+
+\title{CS 446 MJT --- Homework 5}
+\author{\emph{your NetID here}}
+\date{Version 1}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instructions.}
+\begin{itemize}
+    \item
+    Homework is due \textbf{Tuesday, April 16, at 11:59pm}; no late homework accepted.
+
+    \item
+    Everyone must submit individually at Gradescope under \texttt{hw5} and \texttt{hw5code}.
+
+    \item
+    The ``written'' submission at \texttt{hw5} \textbf{must be typed}, and submitted in
+    any format Gradescope accepts (to be safe, submit a PDF).  You may use \LaTeX, markdown,
+    google docs, MS word, whatever you like; but it must be typed!
+
+    \item
+    When submitting at \texttt{hw5}, Gradescope will ask you to mark out boxes
+    around each of your answers; please do this precisely!
+
+    \item
+    Please make sure your NetID is clear and large on the first page of the homework.
+
+    \item
+    Your solution \textbf{must} be written in your own words.
+    Please see the course webpage for full academic integrity information.
+    Briefly, you may have high-level discussions with at most 3 classmates,
+    whose NetIDs you should place on the first page of your solutions,
+    and you should cite any external reference you use; despite all this,
+    your solution must be written in your own words.
+
+    \item
+    We reserve the right to reduce the auto-graded score for \texttt{hw5code}
+    if we detect funny business (e.g., rather than implementing an algorithm,
+    you keep re-submitting the assignment to the auto-grader, eventually completing
+    a binary search for the answers).
+
+    \item
+    There are \textbf{no regrade requests} on \texttt{hw5code}, which is the code auto-grader;
+    however, you can re-submit and re-grade as many times as you like before the deadline!
+    Start early and report any issues on piazza!
+
+    \item
+    Methods and functions in the template and utility code include
+    docstrings describing the inputs and outputs.  The autograder
+    relies on correct implementations of these methods.  Follow the
+    docstrings to avoid failing tests.
+
+    \item
+    In this homework, you cannot use any of the SciPy or SciKit methods. Importing these libraries or their sublibraries, except for those already imported in \texttt{hw5\_utils.py} will raise an error.
+
+\end{itemize}
+
+\begin{enumerate}
+
+  \begin{Q}
+    \textbf{$k$-means and PCA.}
+
+    Let $\vx_1, \vx_2, \ldots, \vx_n \in \R^d$ be $n$ data points in a $k$-means problem. Let $\vX\in\R^{n\times d}$ denote the data matrix with rows $\vx_1^\T,\ldots,\vx_n^\T$. For centers $\vmu_1, \vmu_2, \ldots, \vmu_k \in \R^d$, define the matrix $\vC$ with the centers as its rows. Let $\vA\in\{0,1\}^{n\times k}$ denote an assignment matrix, meaning there is a single $1$ per row, and all other entries are zeros.  The notation $\cC_{d,k}=\R^{k \times d}$ for matrices of $k$ centers in $d$ dimensions, and the notation $\cA_{n,k}\subseteq \{0,1\}^{n\times k}$ for all possible assignment matrices. Let $\vX = \vU\vS\vV^\top$ be the full singular value decomposition of $\vX$ with the diagonal of $\vS$ being sorted in decreasing order. Define $\vV_l$ as the first $l$ columns of $\vV$, corresponding to the $l$ largest singular values.
+
+    \begin{enumerate}
+      \item
+        Prove that for any orthonormal matrix $\vM$,
+        \[
+          \|\vX - \vA\vC\|_\tF^2
+          =
+          \enVert{ \del{\vX - \vA\vC}\vM\vM^\T }_\tF^2
+          +
+          \enVert{ \del{\vX - \vA\vC}\del{\vI - \vM\vM^\T} }_\tF^2.
+        \]
+
+      \item
+        Prove that for any fixed assignment matrix $\vA$, the row space of the optimal $\vC$ is a subset of the row space of $\vX$.
+
+        \textbf{Hint.} The matrix $\vV_r$ is orthonormal, where $r$ denotes rank of $\vX$.
+
+      \item
+        Prove that $\enVert{ \vX - \vA\vC}_\tF^2 \geq \sum_{i=k+1}^r s_i^2$, for any assignment matrix and any choice of the $k$ centers, where $(s_i)_i$ is the decreasing sequence of singular values of $\vX$.
+
+      \item
+        Let $(\vA_l,\vC_l) = \argmin_{\substack{\vA\in\cA_{n,k}\\\vC\in\cC_{d,k}}} \|\vX\vV_l\vV_l^\T - \vA\vC\|_\tF^2$. Then
+        \[
+          \|\vX\vV_l\vV_l^\T - \vA_l\vC_l\|_\tF^2
+          \leq
+          \min_{\substack{\vA\in\cA_{n,k}\\\vC\in\cC_{d,k}}} \|\vX - \vA\vC\|_\tF^2
+          \leq
+          \|\vX\vV_l\vV_l^\T - \vA_l\vC_l\|_\tF^2
+          + \sum_{i=l+1}^r s_i^2.
+        \]
+        \textbf{Remark.}  This means that if PCA down to some dimension doesn't incur too much error, then we can solve $k$-means there without things changing too much.
+    \end{enumerate}
+  \end{Q}
+
+
+\begin{Q}
+  \textbf{$k$-means.}
+
+  In this problem you will deal with the Iris dataset by Ronald Fisher. The dataset consists of measurements of various classes of Iris flowers and the goal is to group the points into classes. The dataset provides four features of the flowers. They are sepal length, sepal width, petal length and petal width, respectively, measured in centimeters. You can access these data by calling the method \texttt{load\_iris\_data()}. The function returns two NumPy arrays of shape $(150,4)$ and $(150,1)$. The first array contains $150$ datapoints with $4$ features each and the latter array contains the corresponding label of datapoints. Note that your solution is not allowed to directly invoke \texttt{sklearn} or \texttt{scipy}.
+
+  \begin{enumerate}
+    \item
+      Implement Lloyd's method inside the \texttt{k\_means(X, k)} method, which takes as input a NumPy array of shape $(n, d)$ of $n$ datapoints of dimension $d$ and a positive integer $k$. The method should return a $k \times d$ matrix in which each row corresponds to one of the $k$ centers.  For the initialization, use a random (valid) assignment matrix. You don't need to write anything in the hand-in solutions for this part.
+
+    \item
+      Implement the \texttt{get\_purity\_score(X, Y, C)} method. The method takes a data matrix $\vX$ of shape $(n,d)$, a label array $\vY$ of shape $(n,1)$, and a matrix $\vC$ of shape $(k,d)$ with rows corresponding to the $k$ centers. The purity score of a clustering is defined as the percentage of data points whose label matches the plurality label of the cluster they are placed in. The function should return a number in range $[0,1]$, that is the purity score of the clustering induced on $\vX$ by the centers $\vC$. Ties can be broken arbitrarily. You don't need to write anything in the hand-in solutions for this part.
+
+    \item
+      Load the Iris dataset using the \texttt{load\_iris\_data()} method and apply your implementation of $k$-means to it with different values of $k$. Plot the purity score of the classification as a function of $k$. You can use the \texttt{line\_plot(data1, ..., min\_k=2, output\_file='plot.pdf')} to draw the plot. This method takes as input an array of purity scores and prints the corresponding line plot to a PDF file. The optional argument \texttt{min\_k} indicates the first label along the $x$ axis and \texttt{output\_file} indicates the output file location. Describe the behavior of purity score as $k$ increases. At what point does purity reach $1$?
+
+    \item
+      In the next three parts, you will use $k$-means centers to learn features of a dataset. For a data matrix $\vX$ of shape $(n,d)$ and centers matrix $\vC$ of shape $(k,d)$, let $\vA$ be the $(n,k)$ matrix of assignments in the $i$-th row equals $\ve_j^\top$ if the $j$-th center is the closest center to the $i$-th datapoint. You may break ties arbitrarily. Run the \texttt{logistic\_regression(X, Y)} method given in \texttt{hw5\_utils.py} on the rows of $\vA$. The output of the function is of type \texttt{sklearn.linear\_model.LogisticRegression} and in particular supports the method \texttt{predict\_proba(x)} that returns the probability of a given data point \texttt{x} having each of the four labels.
+      See the documentation at \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html}.
+      Implement the function \texttt{classify\_using\_k\_means(X, Y, k)} that takes and input the data matrix $\vX$ and labels $\vY$ and the integer $k$ indicating the number of centers, and returns a function $f$ that takes a point $x \in \R^d$ and returns a label in $\set{0,1,2,3}$. You don't need to write anything in the hand-in solutions for this part.
+
+    \item
+      In this part you will repeat the previous problem, except instead of the matrix $\vA$, you should construct the matrix $\vA_l$ that has exactly $l$ ones in each row $i$, that correspond to the $l$ closest centers to the $i$-th datapoint. Ties can be broken arbitrarily. Implement \texttt{classify\_using\_k\_means(X, Y, k, l=1)} as in the previous part, for all positive integer $l$. You don't need to write anything in the hand-in solutions for this part.
+
+    \item
+      The method \texttt{load\_iris\_data(ratio=0)} takes a value \texttt{ratio} in range $[0,1]$ and returns the matrices $\vX_\text{train}$, $\vX_\text{test}$, $\vY_\text{train}$ and $\vY_\text{test}$ where $\vX_\text{test}$, $\vY_\text{test}$ is a test set with $\left\lfloor n \times \text{ratio} \right\rfloor$ points and $\vX_\text{train}$, $\vY_\text{train}$ is the training dataset and contains the rest the points.
+      Use this method to train a classifiers using \texttt{classify\_using\_k\_means(X, Y, k, l)} with training/test ratio of $0.8$ and $k \in {2, 3, \ldots, 20}$. Plot the training error and test error of the classifier against $k$ once for $l=1$ and once for $l=3$, and describe your explanation for the trends in a few sentences.
+      Again, you can use the method \texttt{line\_plot(data1, ..., min\_k=2, output\_file='plot.pdf')} to plot the data.
+
+    \item
+      Train a $k$-means model with $4$ centers. Plot the data and group them by the closest center. To draw the plot, you can use the method \texttt{scatter\_plot\_2d\_project(X1, \ldots, output\_file='output.pdf', ncol=3)}. This method takes multiple matricies \texttt{X1, \ldots} of size $n_i \times d$ each corresponding to one cluster. It generates ${d \choose 2}$ plots, one for every pair of dimensions. The output is then saved to the file indicated by \texttt{output\_file}.
+  \end{enumerate}
+\end{Q}
+
+\begin{Q}
+  \textbf{E-M and GMMs.}
+
+  In this problem you will implement the E-M algorithm to learn a mixture of $k$ Gaussians with diagonal covariances, as detailed in lecture. You will be using the same data as in Problem 2.
+
+  \begin{enumerate}
+    \item
+      Implement the \texttt{gmm(X, k)} method. In this method \texttt{X} is a data matrix of shape $(n,d)$. The positive integer \texttt{k} indicates the number of Gaussian components in the mixture. Your output should be a matrix $\mu$ of shape $(k,d)$ where each row corresponds to the mean of one of the Gaussians, a matrix $\Sigma$ of shape $(k,d)$ matrices where the $i$-th row corresponds to the diagonal of the covariance matrix of the $i$-th Gaussians and a $k$-vector of probability distribution over the $k$ Gaussian components.  For initialization, set the weights $\pi$ to be uniform, the covariances to be diagonal, and the means to be the result of your $k$-means solution from the previous part after 10 iterations.
+
+    \item
+      Compute and plot the log-likelihood of the model when trained on the data trained by your algorithm with a uniform \texttt{pi} against the value of \texttt{k} ranging from $2$ to $10$. You can use the method \texttt{line\_plot(data1, ..., min\_k=2, output\_file='plot.pdf')} to plot the data.
+
+    \item
+      Implement the \texttt{gmm\_predict(x, mu, covars, weights)} method. In this method, \texttt{x} is a $d \times 1$ vector, \texttt{mu} is a matrix of shape $(k,d)$, the list \texttt{covars} is of length $k$ and consists of $d \times d$ covariance matrices and \texttt{weights} is a $k \times 1$ vector that is probability distribution indicating the weights of the $k$ Gaussian components. Your method should return a $k$-vector that is the probability distribution of the datapoint $\vx$ having been generated by each of the Gaussian components.
+
+    \item
+      Implement the method \texttt{classify\_using\_gmm(X, Y, k)}. This method takes a data matrix \texttt{X} and label vector $Y$ and positive integer \texttt{k}, and fits a Gaussian mixture model of $k$ components on this data. Let $R$ be the responsibility matrix of this model. Train a logistic model on the data matrix $R$ and labels $Y$. You can use the method \texttt{logistic\_regression} from \texttt{hw5\_utils.py}.
+
+    \item
+      Train a Gaussian mixture model with $4$ components. Plot the data and group them by the closest center. To draw the plot, you can use the method \texttt{gaussian\_plot\_2d\_project(X1, \ldots, output\_file='output.pdf', ncol=3)}. This method takes multiple matricies \texttt{X1, \ldots} of size $n_i \times d$ each corresponding to one cluster. It generates ${d \choose 2}$ plots, one for every pair of dimensions. The output is then saved to the file indicated by \texttt{output\_file}.
+  \end{enumerate}
+\end{Q}
+\end{enumerate}
+
+\bibliography{bib}
+\bibliographystyle{plainnat}
+
+\end{document}
