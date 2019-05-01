@@ -1,0 +1,334 @@
+        \documentclass{article}
+                \usepackage[margin=1in]{geometry}
+                \usepackage{hyperref}
+                \usepackage{amsmath,amsfonts,amssymb,amsthm,commath,dsfont}
+                \usepackage{enumitem}
+                \usepackage{framed}
+                \usepackage{xspace}
+                \usepackage{microtype}
+                \usepackage[round]{natbib}
+                \usepackage{cleveref}
+                \usepackage[dvipsnames]{xcolor}
+                \usepackage{graphicx}
+                \usepackage{nicefrac}
+
+                % following loops stolen from djhsu
+                \def\ddefloop#1{\ifx\ddefloop#1\else\ddef{#1}\expandafter\ddefloop\fi}
+                \def\ddef#1{\expandafter\def\csname bb#1\endcsname{\ensuremath{\mathbb{#1}}}}
+                \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+                \def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+                \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+                \def\ddef#1{\expandafter\def\csname bf#1\endcsname{\ensuremath{\mathbf{#1}}}}
+                \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+                % \cA, \cB, ...
+                \def\ddef#1{\expandafter\def\csname c#1\endcsname{\ensuremath{\mathcal{#1}}}}
+                \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZ\ddefloop
+
+                % \vA, \vB, ..., \va, \vb, ...
+                \def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{#1}}}}
+                \ddefloop ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\ddefloop
+        % \valpha, \vbeta, ...,  \vGamma, \vDelta, ...,
+        \def\ddef#1{\expandafter\def\csname v#1\endcsname{\ensuremath{\boldsymbol{\csname #1\endcsname}}}}
+        \ddefloop {alpha}{beta}{gamma}{delta}{epsilon}{varepsilon}{zeta}{eta}{theta}{vartheta}{iota}{kappa}{lambda}{mu}{nu}{xi}{pi}{varpi}{rho}{varrho}{sigma}{varsigma}{tau}{upsilon}{phi}{varphi}{chi}{psi}{omega}{Gamma}{Delta}{Theta}{Lambda}{Xi}{Pi}{Sigma}{varSigma}{Upsilon}{Phi}{Psi}{Omega}{ell}\ddefloop
+
+                \DeclareMathOperator*{\argmin}{arg\,min}
+                \DeclareMathOperator*{\argmax}{arg\,max}
+
+                \def\SPAN{\textup{span}}
+                \def\tu{\textup{u}}
+                \def\R{\mathbb{R}}
+                \def\E{\mathbb{E}}
+                \def\Z{\mathbb{Z}}
+                \def\be{\mathbf{e}}
+                \def\nf{\nabla f}
+                \def\veps{\varepsilon}
+                \def\cl{\textup{cl}}
+                \def\inte{\textup{int}}
+                \def\dom{\textup{dom}}
+                \def\Rad{\textup{Rad}}
+                \def\lsq{\ell_{\textup{sq}}}
+                \def\hcR{\widehat{\cR}}
+                \def\hcRl{\hcR_\ell}
+                \def\cRl{\cR_\ell}
+                \def\hcE{\widehat{\cE}}
+                \def\cEl{\cE_\ell}
+                \def\hcEl{\hcE_\ell}
+                \def\eps{\epsilon}
+                \def\1{\mathds{1}}
+                \newcommand{\red}[1]{{\color{red} #1}}
+                \newcommand{\blue}[1]{{\color{blue} #1}}
+                \def\srelu{\sigma_{\textup{r}}}
+                \def\vsrelu{\vec{\sigma_{\textup{r}}}}
+                \def\vol{\textup{vol}}
+                \def\tF{{\scriptscriptstyle\textup{F}}}
+                \DeclareMathOperator{\tr}{tr}
+                \newcommand\T{{\scriptscriptstyle\mathsf{T}}}
+
+                \newcommand{\ip}[2]{\left\langle #1, #2 \right \rangle}
+                \newcommand{\mjt}[1]{{\color{blue}\emph\textbf{[M:}~#1~\textbf{]}}}
+
+                \def\hPr{\widehat{\textup{Pr}}}
+                \def\Lip{\textup{Lip}}
+
+                \newtheorem{fact}{Fact}
+                \newtheorem{lemma}{Lemma}
+                \newtheorem{claim}{Claim}
+                \newtheorem{proposition}{Proposition}
+                \newtheorem{theorem}{Theorem}
+                \newtheorem{corollary}{Corollary}
+                \newtheorem{condition}{Condition}
+                \theoremstyle{definition}
+                \newtheorem{definition}{Definition}
+                \theoremstyle{remark}
+                \newtheorem{remark}{Remark}
+                \newtheorem{example}{Example}
+
+                \newenvironment{Q}
+                {%
+                    \clearpage
+                \item
+                    }
+                {%
+                    \phantom{s}
+                  \bigskip
+                  \textbf{Solution.}
+                }
+
+                \title{CS 446 MJT --- Homework 6}
+                \author{\emph{your NetID here}}
+                \date{Version 2}
+
+                \begin{document}
+                \maketitle
+
+                \textbf{Instructions.}
+                \begin{itemize}
+                    \item
+                        Homework is due \textbf{Tuesday, April 30, at 11:59pm}; no late homework accepted.
+
+                    \item
+                        Everyone must submit individually at gradescope under \texttt{hw6} and \texttt{hw6code}.
+
+
+                    \item
+                        The ``written'' submission at \texttt{hw6} \textbf{must be typed}, and submitted in
+                        any format gradescope accepts (to be safe, submit a PDF).  You may use \LaTeX, markdown,
+                        google docs, MS word, whatever you like; but it must be typed!
+
+
+                    \item
+                        When submitting at \texttt{hw6}, gradescope will ask you to mark out boxes
+                        around each of your answers; please do this precisely!
+
+                    \item
+                        Please make sure your NetID is clear and large on the first page of the homework.
+
+                    \item
+                        Your solution \textbf{must} be written in your own words.
+                        Please see the course webpage for full academic integrity information.
+                        Briefly, you may have high-level discussions with at most 3 classmates,
+                        whose NetIDs you should place on the first page of your solutions,
+                        and you should cite any external reference you use; despite all this,
+                        your solution must be written in your own words.
+
+                    \item
+                        We reserve the right to reduce the auto-graded score for \texttt{hw6code}
+                        if we detect funny business (e.g., rather than implementing an algorithm,
+                        you keep re-submitting the assignment to the auto-grader, eventually completing
+                        a binary search for the answers).
+
+                    \item
+                      There are \textbf{no regrade requests} on \texttt{hw6code}, which is the code auto-grader;
+                      however, you can re-submit and re-grade as many times as you like before the deadline!
+                      Start early and report any issues on piazza!
+
+                    \item
+                        Methods and functions in the template and utility code include
+                        docstrings to describe the inputs and outputs.  The autograder
+                        relies on correct implementations of these methods.  Follow the
+                        docstrings to avoid failing tests.
+
+
+                \end{itemize}
+                \begin{enumerate}
+
+                        \begin{Q}
+                            \textbf{$k$-means.}
+                            
+        Recall the $k$-means problem with $n$ data points $S = (\vx_i)_{i=1}^n$ in $\mathbb{R}^d$, $k$ centers $(\vmu _i)_{i=1}^k$ in $\mathbb{R}^d$, and corresponding clusters $(S_j)_{j=1}^k$.  The objective of $k$-means is then to minimize the cost:
+        						\begin{align*}
+        						\phi_{S}( \vmu_1,\ldots,\vmu_k ) = \sum_{i=1}^n \min_{j} \Vert \vx_i - \vmu_j \Vert^2.
+        						\end{align*}	
+        					In this problem you will develop an alternate formulation of this cost function in terms of pairwise distances.
+                            \begin{enumerate}
+        						\item 					
+        						Let $S_{\vz} \subset S$ be the cluster induced by using a particular point $\vz \in \mathbb{R}^d$ as a center. Then the cost of using any point $\vz$ as a center is then given by
+        						\begin{align*}
+        						\phi_{S_{\vz}} (\vz) = \sum_{\vx \in S_{z}} \Vert \vx - \vz \Vert^2.
+        						\end{align*}
+        						Let $\vmu(S_{\vz})$ be the sample mean of the cluster $S_{\vz}$.  Prove that the cost $\phi_{S_{\vz}}(\vz)$ is equivalent to				
+        						\begin{align*}
+        						\phi_{S_{\vz}}( \vz ) = \phi_{S_{\vz}}(\vmu(S_{\vz})) + |S_{\vz}| \Vert \vmu(S_{\vz}) - \vz \Vert ^2.
+        						\end{align*}
+        					\item Show that
+        					\begin{align*}
+        					\phi_{S_j}(\vmu_j) = \frac{1}{2|S_j|} \sum_{\va,\vb \in S_j} \Vert \va - \vb \Vert^2 .
+        					\end{align*}
+        					Conclude that solving the $k$-means problem is equivalent to solving
+        					\begin{align*}
+        					\min_{S_1,\dots,S_k} \sum_{j=1}^k \frac{1}{2|S_j|} \sum_{\va,\vb \in S_j } \Vert \va - \vb \Vert^2.
+        					\end{align*}
+
+                            \end{enumerate}                    
+                        \end{Q}
+                    
+                  \emph{(Your solution here.)}
+
+
+                        \begin{Q}
+                            \textbf{Wasserstein Distance.}
+
+                            Consider two discrete distributions with weights $(\alpha_i)_{i=1}^n$
+                            and $(\beta_j)_{j=1}^m$ on points $(\vx_i)_{i=1}^n$ and $(\vz_j)_{j=1}^m$.
+                            The Wasserstein distance between these two distributions (let's call them
+                            $\mu$ and $\nu$) is
+                            \[
+                              W(\mu, \nu) = \max_{\|f\|_{\Lip} \leq 1} \sum_{i=1}^n \alpha_i f(\vx_i) - \sum_{j=1}^m \beta_j f(\vz_j).
+                            \]
+
+                            \begin{enumerate}
+                              \item
+                                Suppose $n=m$ and $\alpha_i = \beta_i = \nicefrac 1 n$,
+                                meaning both distributions are uniform.
+                                Show that for any permutation $\pi$ of $(1,\ldots, n)$.
+                                \[
+                                  W(\mu,\nu) \leq \max_i\| \vx_i - \vz_{\pi(i)}\|.
+                                \]
+                                Note that this implies
+                                $W(\mu,\nu) \leq \min_\pi \max_i \|\vx_i - \vz_{\pi(i)}\|$.
+
+
+                              \item
+                                Choose $((\alpha_i,\vx_i))_{i=1}^n$ and $((\beta_j,\vz_j))_{j=1}^m$
+                                with $m=n$ so that
+                                \[
+                                  0 < W(\mu,\nu) = \min_\pi \max_i \|\vx_i - \vz_{\pi(i)}\|.
+                                \]
+
+                              \item
+                                Choose $((\alpha_i,\vx_i))_{i=1}^n$ and $((\beta_j,\vz_j))_{j=1}^m$
+                                with $m=n$ so that
+                                \[
+                                  0 < W(\mu,\nu) \leq \frac 1 {100}
+                                  \min_\pi \max_i \|\vx_i - \vz_{\pi(i)}\|.
+                                \]
+                        \end{enumerate}
+                    \end{Q}
+                        \emph{(Your solution here.)}
+
+
+      \begin{Q}
+          \textbf{Boosting.}
+          
+          In this problem we will consider boosting applied to interval classifiers on the real line.
+          An interval classifier has the form $h(x) := \1[ a \leq x \leq b]$; let $\cH$
+          denote all such classifiers (meaning for all $a\leq b$).
+          Boosting therefore outputs a function of the form
+          \begin{align*}
+          g(x) = \sum_{j=1}^m \alpha_j h_j(x) = \sum_{j=1}^m  \alpha_j \cdot\1[ a_j \leq x \leq b_j].
+          \end{align*}  
+          For all parts of this problem let $ (x_i,y_i)_{i=1}^n$ be a data set of $n$ points $x_i \in \mathbb{R}$ along with associated labels $y_i \in \{-1,1\}$.  Assume that the $x_i$ are in sorted order and distinct, meaning $x_i < x_{i+1}$. 
+          \begin{enumerate}
+            \item
+              Let $(q_1,\ldots,q_n)$ be any weights on the training set, meaning
+              $q_i \geq 0$ and $\sum_i q_i = 1$.  Show that
+              \[
+                \min_{h\in \cH} \sum_{i=1}^n q_i \1[ 2h(x_i)-1 \neq y_i ]
+                \ \leq\ {}
+                \min\cbr[4]{ \sum_{\substack{i\in \{1,\ldots,n\}\\y_i > 0}} q_i,
+                \sum_{\substack{i\in \{1,\ldots,n\}\\y_i < 0}} q_i }.
+              \]
+
+              \textbf{Remark.}  This calculation is related to the ``weak learning assumption''
+              discussed in lecture.  The only difference is these predictors map to $\{0,1\}$,
+              rather than $\{-1,+1\}$.
+
+            \item
+              Show that
+              \[
+                \min_{h\in \cH} \sum_{i=1}^n \frac 1 n \1[ 2h(x_i)-1 \neq y_i ]
+                \ \leq\ {}
+                \frac{n-L}{n},
+              \]
+              where $L$ is the length of the longest contiguous subsequence of examples having
+              the same labels, meaning $y_j = y_{j+1} = \cdots = y_{j+L-1}$ for some $j$.
+
+            \item
+              Show that there exists an integer $m$, reals $(\alpha_1,\ldots,\alpha_m)$,
+              and interval classifiers $(h_1,\ldots,h_m)$ with $h_j \in \cH$
+              so that, for every $i$,
+              \[
+                y_i = \sum_{j=1}^m \alpha_j h_j(x_i).
+              \]
+              In other words, that there exists a perfect boosted interval classifier.
+      \end{enumerate}
+    \end{Q}
+                        \emph{(Your solution here.)}
+
+
+                     \begin{Q}
+                      \textbf{Variational Autoencoders.}
+                      
+                      In this problem you will implement a Variational Autoencoder (VAE) to model points sampled from an unknown distribution.  This will be done by constructing an encoder network and a decoder network.  The encoder network $f_{\textup{enc}} : X \subset \mathbb{R}^2 \to \mathbb{R}^h \times \mathbb{R}^h$ takes as input a point $\vx$ from the input space and outputs parameters $(\vmu, \vxi)$ where $\vxi =  \log  \vsigma^2$. The decoder network $f_{\textup{dec}} : \mathbb{R}^h \to \mathbb{R}^2$ takes as input a latent vector $\vz \sim \cN(\vmu, \vsigma^2)$ and outputs an element $\hat{\vx} \in \mathbb{R}^2$ that we would hope is similar to members of the input space $X$. You will train this model by minimizing the (regularized) empirical risk
+                      \begin{align*}
+                     \hcR_{\textup{VAE}} (f) =  \frac{1}{n}\sum_{i=1}^n \ell ( f_{\textup{dec}}  (f_{\textup{enc}}(\vx)), \vx) + \lambda \textup{KL}\del{\cN(\vmu(\vx_i), \exp(\vxi(\vx_i)/2)), \cN(0, I)}.
+                      \end{align*}
+                      \begin{enumerate}
+                    \item Let $\vSigma = \textup{diag}(\vsigma^2)$.  In your written submission show that
+                    \begin{align*}
+                    \textup{KL}\del{\cN(\vmu, \vSigma ), \cN(0,I)} = -\frac{1}{2} \sbr{ h + \sum_{j=1}^h\del{ \log \sigma^2_j - \mu_j^2 - \sigma_j^2 } },
+                    \end{align*}
+                    where $\textup{KL}(p,q) = \int p(\vx) \ln \frac {p(\vx)}{q(\vx)}\dif \vx$ is the \emph{KL divergence} between two densities $p,q$. You may use the fact that the KL-divergence between two $h$-dimensional normal distributions $\cN( \vmu_0, \vSigma_0), \cN ( \vmu_1, \vSigma_1 ) $ is given by
+                    \begin{align*}
+                    \textup{KL}(\cN( \vmu_0, \vSigma_0), \cN ( \vmu_1, \vSigma_1 )) = \frac{1}{2} \left( \tr( \vSigma_1^{-1} \vSigma_0) + (\vmu_1 - \vmu_0)^\top \vSigma_1^{-1}(\vmu_1 - \vmu_0) - h + \ln \frac{|\vSigma_1|}{|\vSigma_0|} \right) .
+                    \end{align*}
+                    \item Use the empirical risk discussed above to implement a VAE in the class \texttt{VAE}.  Use ReLU activations between each layer, except on the last layer of the decoder use sigmoid.  Use the ADAM optimizer to optimize in the \texttt{step()} function.  Make use of the PyTorch library for this. Use \texttt{torch.optim.Adam()}, there is no need to implement it yourself.  Please refer to the docstrings in hw6.py for more implementation details.
+                    \item Implement the \texttt{fit} function using the \texttt{net.step()} function from the \texttt{VAE} class.  See the docstrings in \texttt{hw6.py} for more details.  
+                    \item Fit a \texttt{VAE} on the data generated by \texttt{generate\_data} in \texttt{hw6\_utils.py}.  Use a learning rate $\eta = 0.01$, latent space dimension $h = 6$, KL-divergence scaling factor $\lambda = 5 \times 10^{-5}$, and train for 8000 iterations. Use least squares as the loss, that is, let $\ell(f(\vx),\hat\vx) = \Vert f(\vx) - \hat\vx \Vert^2_2$.  Include separate plots of each of the following in your written submission:
+                    \begin{enumerate}
+                    \item Your empirical risk $\hcR_{\textup{VAE}}$ on the training data vs iteration count;
+                    \item The data points $(\vx)_{i=1}^n$ along with their encoded and decoded approximations $\hat \vx =  f_{\textup{dec}} ( f_{\textup{enc}}(\vx))$;
+                    \item The data points $(\vx)_{i=1}^n$ along with their encoded and decoded approximations $\hat \vx$, and $n$ generated points $f_{\textup{dec}}(\vz)$ where $\vz \sim \cN ( 0, I)$.
+                    \end{enumerate}
+                    After you are done training, save your neural network to a file using \texttt{torch.save(model.cpu().state\_dict(), "vae.pb")}. You will submit this file to the autograder with your code submission.
+                    \item What is the difference between the $\hat \vx$ and $f_{\textup{dec}}(\vz)$ in general?  Why are they different in the plots?
+                    \item Repeat part (d) except this time use L1 as your loss, that is let $\ell(f(\vx),\hat \vx) = \Vert f(\vx) - \hat\vx \Vert_1 = \sum_{j=1}^2 |x_j - \hat x_j|$. Again, be sure to include the plots in your written submission.
+                    \item Fit a \texttt{VAE} with $\lambda \in\{1,0.01,0.001\}$ and L1 loss on the same data again , but this time only plot (iii) from part (d).  Discuss your results.  Do you expect the VAE to generalize more closely to the true distribution better or worse as you increase $\lambda$?  Out of all of the parameters you tried including $5 \times 10^{-5}$, which $\lambda$ parameter seems to give the right balance?  Be sure to provide a brief justification for your choice.
+                   
+                     \end{enumerate}
+                     \end{Q}
+
+                        \begin{Q}
+                            \textbf{Naive Bayes \red{(Extra credit!)}.}
+                            
+                            Let $\vX = (X_1,\dots,X_d)$ be a vector of $d$ binary random variables whose distribution, labeled by a boolean function $f : \{0,1\}^d \to \{0,1\}$.
+                            Naive bayes proceeds by forming estimates of various probabilities,
+                            and predicting with
+                            \begin{align*}
+                            \hat f(\vx) = \arg \max_{y} \hPr(Y=y) \prod_{i=1}^d \hPr( X_i = x_i | Y=y).
+                            \end{align*}
+                            \begin{enumerate}
+        						\item Suppose $f(\vx) = \1\left( \sum_{j=1}^d x_j \geq \frac{d}{2}\right)$, and that the various $\hPr$ estimates in $\hat f$ are exact. Show that the naive Bayes predictor $\hat f (\vx)$ classifies perfectly in this case.  For this problem you can assume $d$ is odd.
+        						
+        						\textbf{Hint.} Use symmetry arguments to make computing the probabilities easier.
+        						\item Under the same setup from part(a), construct a boolean function $f : \{0,1\}^3 \to \{0,1\}$ for which naive Bayes will be unable to correctly classify every binary vector $\vx \in \{0,1\}^3$.  Be sure to verify that your construction works.
+        					
+                        \end{enumerate}
+                    \end{Q}
+    \emph{(Your solution here.)}
+
+
+        	\end{enumerate}
+
+
+                \end{document}
